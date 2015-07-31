@@ -32,7 +32,7 @@ namespace BankingKataTests
             account.PrintBalance(printer);
 
             var output = stringWriter.GetStringBuilder();
-            var expected = "Balance: £0.00";
+            var expected = "Balance: $0.00";
             Assert.That(output.ToString(), Is.EqualTo(expected));
         }
 
@@ -49,7 +49,7 @@ namespace BankingKataTests
             account.PrintBalance(printer);
 
             var output = stringWriter.GetStringBuilder();
-            var expected = "Balance: £1,234.56";
+            var expected = "Balance: $1,234.56";
             Assert.That(output.ToString(), Is.EqualTo(expected));
         }
 
@@ -68,7 +68,7 @@ namespace BankingKataTests
             account.PrintLastTransaction(printer);
 
             var output = stringWriter.GetStringBuilder();
-            var expected = "Last transaction: DEP 13 Jul 2015 £789.00";
+            var expected = "Last transaction: DEP 13 Jul 2015 $789.00";
             Assert.That(output.ToString(), Is.EqualTo(expected));
         }
 
@@ -85,7 +85,24 @@ namespace BankingKataTests
             account.PrintLastTransaction(printer);
 
             var output = stringWriter.GetStringBuilder();
-            var expected = "Last transaction: 13 Jul 2015 (£123.00)";
+            var expected = "Last transaction: ATM 13 Jul 2015 ($123.00)";
+            Assert.That(output.ToString(), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ChequeWithdrawalIsPrinted()
+        {
+            var account = new Account();
+            account.WithdrawCheque(new DateTime(2015, 07, 13),new Cheque(new Money(123m), new ChequeCode("123456")));
+
+            var stringWriter = new StringWriter();
+            Console.SetOut(stringWriter);
+
+            IPrinter printer = new ConsolePrinter();
+            account.PrintLastTransaction(printer);
+
+            var output = stringWriter.GetStringBuilder();
+            var expected = "Last transaction: CHQ 123456 13 Jul 2015 ($123.00)";
             Assert.That(output.ToString(), Is.EqualTo(expected));
         }
     }

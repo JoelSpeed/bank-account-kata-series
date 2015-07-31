@@ -28,5 +28,16 @@ namespace BankingKataTests
             var expectedBalance = new Money(4m);
             Assert.That(account.CalculateBalance(), Is.EqualTo(expectedBalance));
         }
+
+        [Test]
+        public void WithdrawingChequeDecreasesTheAccountBalance()
+        {
+            var account = new Account();
+            account.Deposit(DateTime.Now, new Money(6m));
+            account.WithdrawCheque(DateTime.Now, new Cheque(new Money(2m),new ChequeCode("123546")));
+
+            var expectedBalance = new Money(4m);
+            Assert.That(account.CalculateBalance(), Is.EqualTo(expectedBalance));
+        }
     }
 }
